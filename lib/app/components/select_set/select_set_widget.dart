@@ -18,9 +18,8 @@ class _SelectSetWidgetState extends State<SelectSetWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
-        height: constraints.maxHeight,
+        // height: constraints.maxHeight,
         width: constraints.maxWidth * 0.3,
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: SegmentedButton(
             style: ButtonStyle(
                 textStyle: const MaterialStatePropertyAll(

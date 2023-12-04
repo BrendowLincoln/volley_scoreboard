@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:volley_scoreboard/app/components/select_set/select_set_widget.dart';
+import 'package:volley_scoreboard/app/components/side_score/side_score_widget.dart';
 import 'package:volley_scoreboard/app/controllers/home_page_controller.dart';
 import 'package:volley_scoreboard/app/shared/constants/colors.dart';
-import 'package:volley_scoreboard/app/shared/enums/quantity_sets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,80 +34,48 @@ class _HomePageState extends State<HomePage> {
 
     final homeController = HomePageController();
 
-    List<Widget> generateLayout(QuantitySets quantitySets) {
-      int quantityToRender = 1;
-      List<Widget> widgets = [];
-
-      switch (quantitySets) {
-        case QuantitySets.one:
-          quantityToRender = 1;
-          break;
-        case QuantitySets.three:
-          quantityToRender = 3;
-          break;
-        case QuantitySets.five:
-          quantityToRender = 5;
-          break;
-        default:
-          quantityToRender = 1;
-          break;
-      }
-
-      for (var i = 0; i < quantityToRender; i++) {
-        widgets.add(
-          Container(
-              height: screenHeight * 0.13,
-              width: screenHeight * 0.13,
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.colorAccent, width: 1),
-              )),
-        );
-      }
-
-      return widgets;
-    }
-
     return Material(
       child: Container(
+        height: screenHeight * 0.2,
         color: AppColors.background,
         child: Column(
           children: [
-            SizedBox(
-              height: screenHeight * 0.15,
-              child: ValueListenableBuilder(
-                  valueListenable: homeController.$selectedSetQuantityNotifier,
-                  builder: (context, value, __) {
-                    return SelectSetWidget(
-                        value: value,
-                        onSelectChange: (event) =>
-                            homeController.changeSetQuantity(event));
-                  }),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: SizedBox(
+                child: ValueListenableBuilder(
+                    valueListenable:
+                        homeController.$selectedSetQuantityNotifier,
+                    builder: (context, value, __) {
+                      return SelectSetWidget(
+                          value: value,
+                          onSelectChange: (event) =>
+                              homeController.changeSetQuantity(event));
+                    }),
+              ),
             ),
             Container(
               width: screenWidth,
-              height: screenHeight * 0.85,
+              height: screenHeight * 0.80,
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.orange, width: 1),
-                  borderRadius: BorderRadius.circular(5.0)),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SingleChildScrollView(
                     child: ValueListenableBuilder(
                       valueListenable:
                           homeController.$selectedSetQuantityNotifier,
-                      builder: (context, value, child) => Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.colorAccent, width: 1),
-                            borderRadius: BorderRadius.circular(5.0)),
-                        width: screenWidth * 0.06,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: generateLayout(value),
-                        ),
-                      ),
+                      builder: (context, value, child) =>
+                          SideScore(chosedSets: value),
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: ValueListenableBuilder(
+                      valueListenable:
+                          homeController.$selectedSetQuantityNotifier,
+                      builder: (context, value, child) =>
+                          SideScore(chosedSets: value),
                     ),
                   )
                 ],
